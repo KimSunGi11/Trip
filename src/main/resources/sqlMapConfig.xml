@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  			"https://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<!-- Alias 설정 -->
+	<typeAliases>
+
+		<typeAlias alias="user"
+			type="com.springproj.biz.user.repository.UserVO" />
+		<typeAlias alias="travelSpot"
+			type="com.springproj.spot.repository.TravelSpotVO" />
+		<typeAlias alias="reply"
+			type="com.springproj.spot.reply.repository.ReplyVO" />
+		<typeAlias alias="bookmark"
+			type="com.springproj.spot.bookmark.repository.BookMarkVO" />
+		<typeAlias alias="likes"
+			type="com.springproj.spot.reply.repository.ReplyVO" />
+	</typeAliases>
+
+	<!-- Sql Maper 설정 -->
+	<mappers>
+		<mapper resource="mappings/springmember-mapping.xml" />
+		<mapper resource="mappings/travelspot-mapping.xml" />
+		<mapper resource="mappings/reply-mapping.xml" />
+		<mapper resource="mappings/bookmark-mapping.xml" />
+		<mapper resource="mappings/likes-mapping.xml" />
+	</mappers>
+
+</configuration>

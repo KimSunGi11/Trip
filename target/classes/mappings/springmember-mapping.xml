@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="memberDAO">
+	<!-- <resultMap type="com.springproj.biz.user.repository.UserVO" id="user"> 
+		<result column="MEMBER_ID" property="id"/> <result column="MEMBER_PW" property="password"/> 
+		<result column="MEMBER_NAME" property="name"/> </resultMap> -->
+
+	<!-- 로그인할때 사용 -->
+	<select id="getUser" resultType="user">
+	<![CDATA[
+		select * from users
+		where MEMBER_ID = #{MEMBER_ID} and MEMBER_PW = #{MEMBER_PW}
+	]]>
+	</select>
+	<!-- 회원 가입 -->
+	<insert id="insertMember">
+		<selectKey keyProperty="MEMBER_SEQ" resultType="int"
+			order="BEFORE">
+			SELECT count(MEMBER_SEQ) + 1 FROM users
+		</selectKey>
+	<![CDATA[
+		insert into users(MEMBER_SEQ, MEMBER_ID, MEMBER_PW, MEMBER_NAME, MEMBER_EMAIL,MEMBER_EMAIL_GET,MEMBER_PHONE) 
+		values(#{MEMBER_SEQ},#{MEMBER_ID},#{MEMBER_PW},#{MEMBER_NAME},#{MEMBER_EMAIL},#{MEMBER_EMAIL_GET},#{MEMBER_PHONE})
+	]]>
+	</insert>
+	<!-- 회원 정보 수정 -->
+
+	<update id="updateMember">
+	<![CDATA[
+		update users set MEMBER_PW=#{MEMBER_PW}, MEMBER_EMAIL=#{MEMBER_EMAIL}, MEMBER_EMAIL_GET=#{MEMBER_EMAIL_GET}, MEMBER_PHONE=#{MEMBER_PHONE} where MEMBER_ID=#{MEMBER_ID}
+	]]>
+	</update>
+
+	<!-- 회원 탈퇴 -->
+	<delete id="deleteMember">
+	<![CDATA[
+		delete from users where MEMBER_ID = #{MEMBER_ID}
+	]]>
+	</delete>
+	
+	<select id="idChk" resultType="int">
+		SELECT COUNT(*) FROM users
+		WHERE
+		MEMBER_ID = #{MEMBER_ID}
+	</select>
+	
+	<!-- 회원 정보 찾기 -->
+	<select id="findChk" resultType="user">
+		select * from users where MEMBER_ID=#{MEMBER_ID} and MEMBER_EMAIL=#{MEMBER_EMAIL} and MEMBER_EMAIL_GET=#{MEMBER_EMAIL_GET}
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+

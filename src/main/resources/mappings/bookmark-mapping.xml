@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bookmarkDAO">
+
+	<select id="countBoard" resultType="int">
+	<![CDATA[
+		SELECT COUNT(*) FROM bookmark
+		where user_seq=#{user_seq}
+	]]>
+	</select>
+	
+	<select id="checkBookmark" resultType="int">
+	<![CDATA[
+		SELECT COUNT(*) FROM bookmark
+		where seq_travel=#{seq_travel} and user_seq=#{user_seq}
+	]]>
+	</select>
+
+	<select id="getBookMarkList" resultType="bookmark">
+	<![CDATA[
+	select * from (select * from (select rownum rn, a.* from (select * from bookmark order by seq_travel asc)a)
+	where rn between #{start} and #{end})where user_seq=#{user_seq}
+	]]>
+		<!-- select * from bookmark where user_seq=#{user_seq} order by seq_travel 
+			asc -->
+	</select>
+
+	<insert id="insertBookMark">
+	<![CDATA[
+		insert into bookmark(seq_travel,user_seq,address_travel,place_travel,content_travel)
+		values(#{seq_travel}, #{user_seq},#{address_travel}, #{place_travel}, #{content_travel})
+	]]>
+
+	</insert>
+
+
+	<delete id="deleteBookMark">
+	<![CDATA[
+		delete from bookmark where seq_travel=#{seq_travel}
+	]]>
+	</delete>
+
+</mapper>
+
+
+
+
+
+
+

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="spotDAO">
+	<select id="countBoard" resultType="int">
+		<!-- SELECT COUNT(*) FROM travelSpot -->
+
+		SELECT COUNT(*) FROM
+		travelSpot where 1=1
+		<if test="searchCondition == 'PLACE' ">
+			and place like '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'ADDRESS' ">
+			and address like '%'||#{searchKeyword}||'%'
+		</if>
+
+	</select>
+
+	<select id="getTravelSpotList" resultType="travelSpot">
+		<![CDATA[
+		select * from (select rownum rn,a.* from ( select seq, place,address, content,
+		likes, cnt, imageFile1, imageFile2, imageFile3, imageFile4, likes *
+		100 + cnt as score
+		from travelSpot where 1 = 1]]>
+		<if test="searchCondition == 'PLACE' ">
+			and place like '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchCondition == 'ADDRESS' ">
+			and address like '%'||#{searchKeyword}||'%'
+		</if>
+	<![CDATA[	order by  score desc)a)where rn between #{start} and #{end}]]>
+
+
+	</select>
+
+	<select id="getTravelSpot" resultType="travelSpot">
+	<![CDATA[
+		
+		select * from travelSpot where seq=#{seq}
+	]]>
+	</select>
+
+	<insert id="insertTravelSpot">
+	<![CDATA[
+		insert into travelspot(seq, place, address, content, likes, cnt, imageFile1, imageFile2, imageFile3, imageFile4)
+		values((select nvl(max(seq), 0)+1 from travelspot), #{place}, #{address}, #{content}, #{likes}, #{cnt}, #{imageFile1}, #{imageFile2}, #{imageFile3}, #{imageFile4})
+	]]>
+	</insert>
+	<update id="incrementViewCount">
+	<![CDATA[
+		update travelspot set cnt= cnt + 1 where seq=#{seq}
+	]]>
+	</update>
+	<!-- <update id="updateCnt"> <![CDATA[ update travelspot set cnt=cnt+1 where 
+		seq=#{seq} ]]> </update> -->
+
+	<update id="updateTravelSpot">
+	<![CDATA[
+		update travelspot set place=#{place}, address=#{address}, content=#{content}, imageFile1=#{imageFile1}, imageFile2=#{imageFile2}, imageFile3=#{imageFile3}, imageFile4=#{imageFile4} where seq=#{seq}
+	]]>
+	</update>
+
+	<delete id="deleteTravelSpot">
+	<![CDATA[
+		delete from travelspot where seq=#{seq}
+	]]>
+	</delete>
+
+	<!-- 추천수가 높은 값순서로 보여주는 쿼리문 -->
+	<select id="selectTopThree" resultType="travelSpot">
+	<![CDATA[
+		SELECT * FROM (
+		SELECT
+		seq, place, address, content, likes, cnt, imageFile1, imageFile2, imageFile3,
+		imageFile4,
+		(likes * 100 + cnt) AS score
+		FROM travelSpot
+		ORDER BY score
+		DESC
+		) WHERE ROWNUM <= 3
+		]]>
+	</select>
+</mapper>
+
+
+
+
+
+
+

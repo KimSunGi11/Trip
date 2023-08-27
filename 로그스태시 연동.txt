@@ -1,0 +1,22 @@
+키바나 상에서
+
+PUT /travelspot
+{
+  "settings": {
+    "number_of_shards": 1, 
+    "number_of_replicas": 1
+  },
+  "mappings": {
+    "properties": {
+      "seq": { "type": "integer" },
+      "place": { "type": "text" },
+      "address": { "type": "text" },
+      "location": { "type": "geo_point" },
+      "place_suggest": {
+        "type": "completion"
+      }
+    }
+  }
+}
+
+실행 후 로그스태시로 데이터 전송

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="likesDAO">
+
+	<!-- 좋아요 누른 사람인지 확인 -->
+	<select id="checkLikeSelect" resultType="int">
+	<![CDATA[
+		select count(*) from likesCheck where seq=#{seq} and MEMBER_ID=#{MEMBER_ID} 
+	]]>
+	</select>
+
+	<!-- 회원 정보를 저장 -->
+	<insert id="insertLikesInfo">
+	<![CDATA[
+		insert into likesCheck(seq, MEMBER_ID) values(#{seq}, #{MEMBER_ID})
+	]]>
+	</insert>
+
+	<!-- 좋아요 누른 사람이 아니라면(0) 좋아요 +1 -->
+	<update id="upLike">
+	<![CDATA[
+		update travelspot set likes = #{likes} + 1 where seq = #{seq} 
+	]]>
+	</update>
+
+	<!-- 좋아요 누른 사람이라면(1) 좋아요 -1 -->
+	<update id="downLike">
+	<![CDATA[
+		update travelspot set likes = #{likes} - 1 where seq = #{seq}
+	]]>
+	</update>
+
+	<!-- -1하면서 회원정보 저장된 회원 정보 삭제 -->
+	<delete id="deleteLikesInfo">
+	<![CDATA[
+		delete from likesCheck where seq=#{seq} and MEMBER_ID=#{MEMBER_ID} 
+	]]>
+	</delete>
+</mapper>
+
+
+
+
+
+
+
